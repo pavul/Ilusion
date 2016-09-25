@@ -8,8 +8,11 @@ public class Physics
 	{
 		boolean hit=false;
 		
-		if(pointx>sprite.getLeft() && pointx<sprite.getRight() && pointy>sprite.getTop() && pointy<sprite.getBottom())
-		{hit=true;}
+		if(pointx>sprite.getLeft() && pointx<sprite.getRight() && pointy>sprite.getTop() && pointy<sprite.getBottom())//checks if (pointx,pointy) lie inside Sprite
+		{
+			hit=true;
+		}
+
 		return hit;
 	}//colision entre un punto y el sprite dado
 
@@ -24,12 +27,14 @@ public class Physics
 	public boolean hitTestCircle(Sprite circle1,Sprite circle2)
 	{
 		
-		float vx=circle1.getCenterX()-circle2.getCenterX();
-		float vy=circle1.getCenterY()-circle2.getCenterY();
+		float vx=circle1.getCenterX()-circle2.getCenterX(); //vx is distance between center of 2 circles along x axis
+		float vy=circle1.getCenterY()-circle2.getCenterY(); //vy is distance between center of 2 circles along y axis 
+
+		float magnitude=(float)Math.sqrt((vx*vx)+(vy*vy)); //in case vx&&vy>0, there exists a hypotenuse whose length is == magnitude with base vx and height vy (triangle) 
+
+
+		float totalRadii=circle1.getHalfWidth()+circle2.getHalfWidth(); //sum of radius of 2 circles
 		
-		float magnitude=(float)Math.sqrt((vx*vx)+(vy*vy));
-		
-		float totalRadii=circle1.getHalfWidth()+circle2.getHalfWidth();
 		
 		boolean hit=magnitude<totalRadii;
 		
