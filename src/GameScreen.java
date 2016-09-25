@@ -1,5 +1,5 @@
 
-import Level.Level;
+import Level.GameLevel;
 import Room.Room;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class GameScreen extends Room
     private static final long serialVersionUID = 1687185123900856843L;
     
     
-    public GameScreen(String lvlToLoad, Map<String, Level> levelStack )
+    public GameScreen(String lvlToLoad, Map<String, GameLevel> levelStack )
     {
         
         

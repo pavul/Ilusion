@@ -13,8 +13,13 @@ import java.util.List;
 
 
 /**
- * clase que guarda una serie de items 
+ * clase que guarda una serie de items para mostrarlas en pantalla como
+ * una especie de inventario
  * @author pavulzavala
+ * 
+ * 
+ * this class save a list of items to show them on the screen as a kind
+ * of inventory
  */
 public class Inventory 
 {
@@ -24,6 +29,8 @@ public class Inventory
     int y; //posicion y del inventario
     int cursor; //indica que parte del inventario esta seleccionado
     BufferedImage bgSlot; //imagen de fondo del slot, los items van sobrepuestos de esta foto
+    int padding;//el padding de cada slot, por default 20;
+    
     
     /**
      * constructor donde se le pasan los items que va a contener y las
@@ -37,6 +44,7 @@ public class Inventory
         this.slots=slots;
         this.x=x;
         this.y=y;   
+        this.padding = 20;
     }//
     
     
@@ -50,6 +58,10 @@ public class Inventory
      */
     public void drawGrid(Graphics g, int rows, int columns, int width, int height)
     {
+        
+        x = 64;
+        y = 64;
+        
         Graphics2D g2 = (Graphics2D)g;
         
         if(columns <=0 || rows <= 0 || slots.isEmpty())
@@ -68,8 +80,8 @@ public class Inventory
                          {
                              //dibujar imagen
                                   g2.drawImage(slots.get(index).getIcon(), 
-                                  width * j, 
-                                  height * i, 
+                                  x + ( width * j ), 
+                                  y +( height * i ), 
                                   null);
                                   //cantidad que se tiene
                                   //etiqueta
@@ -89,28 +101,40 @@ public class Inventory
      * funcion que dibuja el inventario de manera de lista vertical
      * @param g 
      */
-    public void drawLine(Graphics g)
+    public void drawLine(Graphics g, boolean drawLabel)
     {
     
         if(slots.isEmpty())return;
         
         Graphics2D g2 = (Graphics2D)g;
-        int padding=20;
         
-        
-        int len= slots.size();
+        int len = slots.size();
         
         for( int i = 0 ; i < len; i++ )
         {
             int width = x + slots.get(i).getIcon().getWidth() + padding;
             int heigth = y + (slots.get(i).getIcon().getHeight() * i) + padding;
         
-            g2.drawString(slots.get(i).getLabel(), width,heigth);
-            if(slots.get(i).getIcon() != null)
+            //primero se muestran los iconos
+            if( slots.get(i).getIcon() != null )
             {
-            g2.drawImage(slots.get(i).getIcon(), width + slots.get(i).getIcon().getWidth(),
-                          heigth , null);
-            }    
+            g2.drawImage( slots.get(i).getIcon() , 
+                    width ,
+                    heigth , 
+                    null );
+            }   
+            
+            //para mostrar el texto
+            if( drawLabel )
+            {
+//                int stringW = g.getFont().getM    slots.get( i ).getLabel() );
+//                int stringH = g.getFontMetrics().  ( slots.get( i ).getLabel() );
+                
+            g2.drawString(  slots.get( i ).getLabel(), 
+                            width + slots.get(i).getIcon().getWidth() ,
+                            heigth );
+            }
+             
         }//for
         
     }//

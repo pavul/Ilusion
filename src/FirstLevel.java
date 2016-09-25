@@ -1,30 +1,24 @@
 
-import Control.KeyControl;
 import Dialog.Dialog;
 import Inventory.Inventory;
 import Inventory.Item;
 import Sprite.Sprite;
 import Util.Util;
-import Level.Level;
+import Level.GameLevel;
 import Physics.Collision;
 import Room.GameState;
 import static Room.GameState.DIALOGUING;
 import Room.ImageBackground;
 import Sprite.AnimationState;
-import jaco.mp3.player.MP3Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 //import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author pavulzavala
  */
-public class FirstLevel extends Level
+public class FirstLevel extends GameLevel
 {
     
 //sprtite del jugador    
@@ -53,10 +47,10 @@ Collision colision;
 
     Sprite imgMap;
     
-    int countstep=5000;
+    int countstep = 5000;
     Logger logger;
     
-    boolean moveDown=true;
+    boolean moveDown = true;
     
     int []map =
   {
@@ -112,12 +106,12 @@ Collision colision;
   6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6
   };
     
-    
+    //propiedades para los dialogos
     Dialog dialog;
     String[] messages = {"mensaje 1","mensaje 2","mensaje 3"};
     
     
-    //objeto para el inventario
+    //objetos para el inventario
     List<Item> inventory;
     Inventory inventoryContainer;
     
@@ -146,7 +140,7 @@ Collision colision;
          
          colision = new Collision();  
          
-         
+  //here we add the map array to the level instance
   tileMaps.add(map);
   //System.out.println(" CONST TILEMAP SIZE: "+tileMaps.size());
   
@@ -154,7 +148,7 @@ Collision colision;
         
   int []colmap =
   {
-      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
   1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
   1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
   1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -206,6 +200,7 @@ Collision colision;
   1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
   };
   
+  //here we add the colision map to the level instance
   this.colisionTileMaps.add(colmap);
   
   
@@ -217,16 +212,17 @@ Collision colision;
          
          //se crea el dialog
          dialog = new Dialog(0,cam.getViewYPort()-200,cam.getViewXPort(),200, Color.GREEN);
-         dialog.setVisible(true);
+         dialog.setVisible( true );
          
          //inventario
          inventory = new ArrayList<>();
     
          
-        try {
-            inventory.add(new Item(0,0,99, (BufferedImage) Util.getImage("/res/32x32feather.png"),"feather"));
-            inventory.add(new Item(0,0,99, (BufferedImage) Util.getImage("/res/32x32beef.png"),"beef"));
-            inventory.add(new Item(0,0,99, (BufferedImage) Util.getImage("/res/32x32rod.png"),"rod"));
+        try 
+        {
+            inventory.add(new Item(0 , 0,0,99, (BufferedImage) Util.getImage("/res/32x32feather.png"),"feather","",""));
+            inventory.add(new Item(0 , 0,0,99, (BufferedImage) Util.getImage("/res/32x32beef.png"),"beef","",""));
+            inventory.add(new Item(0 , 0,0,99, (BufferedImage) Util.getImage("/res/32x32rod.png"),"rod","",""));
         
         
         
@@ -276,13 +272,12 @@ Collision colision;
     public void update() 
     {
         
-          switch(gameState)
+          switch( gameState )
                {
                    case LOADING:
+                       //process to show loading screen
                        break;
                    case PLAYING:
-                       
-                       
                     player.updateSubanimation();
                     updateControl(); 
 
@@ -302,6 +297,9 @@ Collision colision;
                    case COMPLETED:
                        break;
                    case PAUSED:
+                       
+                       //show here the PAUSE message or screen
+                       
                        break;
                    case STOPPED:
                        break;
@@ -362,7 +360,7 @@ Collision colision;
         try 
         {
             player= new Sprite(32,32,"/res/32x32player.png");
-//            player= new Sprite(Toolkit.getDefaultToolkit().getImage("/res/player.png"));
+            //player= new Sprite(Toolkit.getDefaultToolkit().getImage("/res/player.png"));
             player.setVisible(true);
             player.setPosition(100, 100);
             player.setRoomBoundLeft(0);
@@ -389,9 +387,9 @@ Collision colision;
 //            player.setSubanimation(viewWidth, countstep);
             
             
-//            System.out.println(" PLAUYER: "+player);
+            //System.out.println(" PLAUYER: "+player);
             
-            this.enemyPool.add(player);
+                this.enemyPool.add(player);
             
 //            imgMap = new Sprite(6, 32,32,"/res/32x32_map_tile.png");
             
@@ -447,10 +445,9 @@ Collision colision;
     
 
     @Override
-    public void renderBackground(Graphics g) {
-
-        
-        
+    public void renderBackground( Graphics g ) 
+    {
+    
 //        System.out.println(" RENDER : "+this.getClass().getName());
         
 //        drawBgColor((Graphics2D)g, Color.DARK_GRAY);
@@ -482,9 +479,11 @@ Collision colision;
         dialog.draw(g);
         }
    
+        //mostrar el inventario como una linea
+        inventoryContainer.drawLine( g , true); 
         
-//        inventoryContainer.drawLine(g);
-        inventoryContainer.drawGrid(g,1,3,32,32);
+        //mostrar el inventario como un grid
+//        inventoryContainer.drawGrid(g,1,3,32,32);
         
     }//
 
@@ -544,6 +543,17 @@ Collision colision;
        
         
         }//
+
+    @Override
+    public void manageNetworkData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean initData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return false;
+    }
    
 }//
 

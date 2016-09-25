@@ -25,6 +25,7 @@ import javax.swing.JFrame;
  * @author pavulzavala
  */
 public class Window2 extends JFrame {
+    private static final long serialVersionUID = -2320451743489595531L;
  
     private ArrayList<Particle2> particles = new ArrayList<Particle2>(500);
  

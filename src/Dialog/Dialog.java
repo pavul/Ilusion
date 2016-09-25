@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Dialog;
 
 import java.awt.AlphaComposite;
@@ -17,6 +13,11 @@ import java.awt.image.BufferedImage;
  * clase para mostrar dialogos entre personajes o para introduccion de texto del juego
  * al inicio o final del juego
  * @author pavulzavala
+ * 
+ * 
+ * this class can show dialogs screen between characters, or for game introductions
+ * or when the game use it, basically show a rectangle at certain point 
+ * in the screen with text inside 
  */
 public class Dialog 
 {
@@ -27,8 +28,8 @@ public class Dialog
     private int w;
     private int h;
     
-    private Color color;
-    private Color textcolor;
+    private Color color; //color de fondo
+    private Color textcolor; //color del texto
     
     private float alpha;
     private BufferedImage img;

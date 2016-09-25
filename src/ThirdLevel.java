@@ -1,5 +1,5 @@
 
-import Level.Level;
+import Level.GameLevel;
 import Room.ImageBackground;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author pavulzavala
  */
-public class ThirdLevel extends Level 
+public class ThirdLevel extends GameLevel 
 {
 
     public ThirdLevel(int roomWidth, int roomHeight, int viewWidth, int viewHeight,
@@ -63,14 +63,24 @@ public class ThirdLevel extends Level
 
     @Override
     public boolean initSound() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     return false; 
     }
 
     @Override
     public void updateControl() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void manageNetworkData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean initData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return false;}
    
     
     

@@ -1,23 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Room;
 
 
 import Audio.Sound;
-import Level.Level;
+import Level.GameLevel;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.Socket;
 import java.util.Map;
+import java.util.logging.Logger;
+import net.ClientSocket;
+import net.Server;
 
 
 /**
  * clase que es la escena o cuarto donde hay fondos, enemigos, jugadores, puntajes, etc.
  * este viene siendo el canvas
+ * 
+ * this class manages all levels of the game and is the class that
+ * handle the process under the hood
+ * 
  * @author pavulzavala
  */
 public class Room extends Canvas implements 
@@ -32,52 +38,90 @@ public class Room extends Canvas implements
     protected Thread gameThread;
     
     //variable indica si el juego esta corriendo o no
+    //indicate if the game is running or not
     protected boolean running;
     
     //variable para pausar el juego
+    //this variable is used to pause the game
     protected boolean pause;
     
     //variable que sirve para contar cuantos frames por segundo hay en la aplicacion
-   protected int frames; //contador de FPS
+   //we store FPS count
+    protected int frames; //contador de FPS
    
    protected int offsetX;  //x_ofset del room para que se renderize el area del dibujo
    
 //   protected GameState gameState; //estado del juego
    
    //variable que guarda el nivel o pantalla en que se esta jugando
-   protected Level currentLevel;
+   //variable that store the current level we are in the game
+   protected GameLevel currentLevel;
+   
+   //esta estructura se utiliza para guardar aqui todos los objetos que
+   //necesitan estar en todo el juego, pueden ser datos como el usuario
+   //, puntajes, upgrades, etc/
+   //this structure is used to store all those data that are persistent
+   //between levels, like, score, upgrades, items, etc, because each
+   //level can set new ammount of data when it starts
+   protected Map< String, Object >persistentData;
+   
    
    //stack que mantiene todos los niveles
-   Map<String, Level> levelStack;
+   //this is the stack where we have all levels for the game
+   Map<String, GameLevel> levelStack;
+   
+   //this variable is to stablish first level to load for default
+   String firsLvlToLoad;
+   
    
    //objeto para hacer las transiciones del room
+   //this object help room to make transition animations, when
+   //a level change to another
    protected Transition transition;
     
-   //objeto que tiene la camara
-//   protected Camera cam;
-    
-    //para saber los frames count
+   //para saber los frames count
+   //these variables are used for testing purposes, to know
+   //the ammount of frames counted each cicle
    protected int frameCount=1; //30 fps
- 
    int count;//
-    
+   int fps=60;
+   
+   //variables para cliente servidor
+   //these variables are only useful if we are using
+   //server/client architecture, i mean, an online game
+   //@TODO still need a lot of work
+   Server gameServer;
+   ClientSocket gameClient;
+   
+   /**
+    * indica si el room va a fungir como servidor, es decir
+    * no procesara interfaz grafica
+    * 
+    *true: indicate if this game is an online game and is the server
+    * false: by default and indicate this game is client that connect
+    * to a server, in case of online game
+    */
+   private boolean serverApplication; 
+   
     /**
      * constructor 1 este constructor crea un room por default con
      * width 640 y heigth 480, se toma la referencia de la ventana que se ve
      * para poder asi cambiar de rooms
-     * @param lvltoLoad
-     * @param levelStack
+     * 
+     * creates a room with width = 640, heigth = 480, fps = 60
+     * by default and it accept a list of levels
+     * 
+     * @param lvltoLoad primer nivel a cargar
+     * @param levelStack listado de niveles que hay en el juego
      */
-    public Room(String lvltoLoad, Map<String, Level>levelStack)
+    public Room(String lvltoLoad, Map<String, GameLevel>levelStack)
     {
-        
+        fps=60;//setea por default a 60 frames por segundo
         this.levelStack = levelStack;
-        
-//        addKeyListener(this);
-//    imgbg = new ArrayList<>();
-//    tileMaps = new ArrayList<>();
+        this.firsLvlToLoad = lvltoLoad;
     }//
     
+ 
     /**
      * constructor 2 este constructor crea un room por default con
      * width 640 y heigth = width /12 * 9, se toma la referencia de la ventana que se ve
@@ -112,39 +156,24 @@ public class Room extends Canvas implements
     
     /**
      * inicia el thread del juego
+     * 
+     * start the thread of the game
      */
     public synchronized void start() 
     {
-//        gameState=Config.STATE_LOADING;
-        
-//        try
-//        {
-//            loadLvl(lvltoLoad);
-//            
-//        }
-//        catch(Exception e)
-//        {
-////        e.printStackTrace();
-//        }
-//        finally
-//        {
-        
-        
-            //se carga el nivel 
-            loadLvl("first");
-        
-            running=true;  
-            gameThread = new Thread(this);
-            gameThread.start();
-//            gameState = GameState.PLAYING;
-//              ./,
-//        }
-  
+            //nivel a cargar por default, este se establece en el constructor 
+            loadLvl( firsLvlToLoad );
+            running = true;  
+            gameThread = new Thread( this );
+            gameThread.start();       
     }//start
     
     
     /**
      * detiene y termina el thread del juego
+     * 
+     * stop the thread of the game
+     * wachout with this method
      */
     public synchronized void stop()
     {
@@ -158,10 +187,15 @@ public class Room extends Canvas implements
     }//stop
     
     
+    /**
+     * this method calls al update process of levels, 
+     * i mean, inside this method the update of the logic
+     * of the game will be taken
+     */
     public synchronized void update()
     {   
         frameCount++;
-        if(frameCount ==60)frameCount=0;
+        if( frameCount == fps )frameCount = 0;
  
        //aqui se hace el update del level
        currentLevel.update();
@@ -171,24 +205,34 @@ public class Room extends Canvas implements
     /**
      * funcion que renderiza todo el game play, esta es la funcion mas importante,
      * pues es la que tiene la interaccion del usuario con el juego
+     * 
+     * this function call render methods of al levels
+     * 
      */
     public synchronized void render()
     {
-        //se obtienen los graficos
-        Graphics g = this.getGraphicsBufferStrategy();
+        //si el room es de un servidor, no se muestra interfaz grafica
+        if(serverApplication) return;
+           
         
+        if(this.getGraphicsBufferStrategy() ==null )
+          return;
         
-        if(g != null)
-        {
-           try
-           {
-              currentLevel.render(g);  
-           }catch(Exception e)
-           {  }
+                //se obtienen los graficos
+                Graphics g = this.getGraphicsBufferStrategy();
 
-        this.closeGraphicsBufferStrategy(g, this.getBufferStrategy());
-        
-        }//if !=null
+
+                if(g != null)
+                {
+                   try
+                   {
+                      currentLevel.render(g);  
+                   }catch(Exception e)
+                   {  }
+
+                this.closeGraphicsBufferStrategy(g, this.getBufferStrategy());
+
+                }//if !=null
         
     }//renderGameState
 
@@ -243,7 +287,9 @@ public class Room extends Canvas implements
 //    }//
 //    
     
-
+/**
+ * here is where the main process of the threas is taken
+ */
     @Override
     public void run() 
     {
@@ -298,6 +344,9 @@ public class Room extends Canvas implements
    
     /**
      * funcion que muestra los frames por segundo del juego
+     * 
+     * an auxiliar function to show some data of FPS that are
+     * processed
      */
     public void showFPS(Graphics2D g2)
     {
@@ -311,7 +360,6 @@ public class Room extends Canvas implements
 //    g2.drawString("offsetX+426: "+(cam.offsetX+426), cam.getOffsetX() + 10, 90);
 //    g2.drawString("playerX: "+(player.getX()), cam.getOffsetX() + 10, 110);
 //    g2.drawString("playerY: "+(player.getY()), cam.getOffsetX() + 10, 130);
-    
     
     }
     
@@ -418,17 +466,17 @@ public class Room extends Canvas implements
        * metodo que sirve para cambiar el nivel o la pantalla, cambia el fondo
        * y vuelve a crear el pool de enemigos, se pueden setear valores al jugador
        * o del puntaje o HUD
+       * 
+       * this functions is very important, is used when a player want to go
+       * from certain level to another, then the current level is then eraded
+       * from memory and the listeners attached to it, too
+       * 
      * @param levelToLoad
        * @return 
        */
       public synchronized boolean loadLvl(String levelToLoad)
       {
           System.out.println(" SE CARGA NIVEL: "+levelToLoad);
-//          System.out.println(" gameState: "+gameState);
-          
-          //se cambia el estado a cargando
-//          gameState = GameState.LOADING;
-          
           if(currentLevel != null)
           {
               //si hay nivel se elimina y se pone a null para liberar recursos 
@@ -443,7 +491,7 @@ public class Room extends Canvas implements
           }//
           
           //se establece el nuevo nivel actual
-          currentLevel =  levelStack.get(levelToLoad);
+          currentLevel =  levelStack.get( levelToLoad );
           
           //se establece el keyListener
           currentLevel.addKeyListener(this);
@@ -462,10 +510,97 @@ public class Room extends Canvas implements
               return false;
           }
           
-          
-          
-          
       }
       
+      /**
+       * funcion que inicia el servidor del juego, este es un socket
+       * 
+       * inits this room as a server for an online game
+       * 
+       * @param port 
+       */
+      public void setGameServer(int port)
+      {
+        try {
+            gameServer = new Server(port);
+        } catch (IOException ex) {
+            Logger.getLogger(Room.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+      }//
+      
+      
+      public Server getGameServer()
+      {
+          return gameServer;
+      }
+      
+      /**
+       * funcion que establece o instancia el socket cliente que se conecta al
+       * servidor
+       * 
+       * init the game as a client in case this game is online
+       * 
+       * @param port
+       * @param ip 
+       */
+      public void setGameClient(int port, String ip)
+      {
+        try {
+            gameClient = new ClientSocket(new Socket(ip, port));
+        }
+        catch(ConnectException conex)
+        {
+        //excepcion cuando se corre el cliente sin que este prendido el servidor
+            
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(Room.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+      }//
+      
+      
+      public ClientSocket getGameClient()
+      {
+          return gameClient;
+      }//getgameclient
+      
+      
+       public Map<String, GameLevel> getLevelStack() {
+        return levelStack;
+    }
+
+    public void setLevelStack(Map<String, GameLevel> levelStack) {
+        this.levelStack = levelStack;
+    }
+
+    /**
+     * establece los FPS a los que corre el juego
+     * @return 
+     */
+    public int getFps() {
+        return fps;
+    }
+
+    /**
+     * regresa el valor de los FPS a los que corre el juego
+     * @param fps
+     */
+    public void setFps(int fps) {
+        this.fps = fps;
+    }
+
+    public boolean isServerApplication() {
+        return serverApplication;
+    }
+
+    /**
+     * si true, indica que esta es una aplicacion de servidor, por enede
+     * no se muestra la interfaz grafica
+     * @param serverApplication 
+     */
+    public void setServerApplication(boolean serverApplication) {
+        this.serverApplication = serverApplication;
+    }
+    
 }//class
 

@@ -1,6 +1,6 @@
 
 
-import Level.Level;
+import Level.GameLevel;
 import Room.Room;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,48 +26,13 @@ public class Game //extends Application
     public static void main(String []args)
     {
   
-         // Get graphics configuration...
-//    GraphicsEnvironment ge = 
-//
-//        GraphicsEnvironment.getLocalGraphicsEnvironment();
-//
-//    GraphicsDevice gd = ge.getDefaultScreenDevice();
-//
-//    GraphicsConfiguration gc = gd.getDefaultConfiguration();
-    // Change to full screen
-//    gd.setFullScreenWindow( frame );
-//
-//        if( gd.isDisplayChangeSupported() ) 
-//        {
-//
-//          gd.setDisplayMode( 
-//
-//    //        new DisplayMode( 640, 480, 32, DisplayMode.REFRESH_RATE_UNKNOWN )
-//            new DisplayMode( 650, 500, 32, DisplayMode.REFRESH_RATE_UNKNOWN )
-//
-//          );
-//
-//        }
-        
-        //se crea el fondo
-//        ImageBackground imgbg = new ImageBackground(null, x, y)
-        
-//          int roomWidth, int roomHeight, int viewWidth, int viewHeight,
-//          int tileColumns, int tileRows ,int tileWidth, int tileHeight
-       
-        //se crea el nivel
-//        FirstLevel lvl1 = new FirstLevel(640, 480, 640, 480, null );
-        
-        FirstLevel lvl1 = new FirstLevel(640, 1600, 640, 480, 
-                                          20, 50, 32, 32 );
-        
-        
+        FirstLevel lvl1 = new FirstLevel(640, 1600, 640, 480, 20, 50, 32, 32 );
         SecondLevel lvl2 = new SecondLevel(640, 480, 640, 480, null );
         ThirdLevel lvl3 = new ThirdLevel(640, 480, 640, 480, null );
         
         
         //se agrega el nivel al stack de niveles
-        Map<String, Level> levelStack =  new HashMap<>();
+        Map<String, GameLevel> levelStack =  new HashMap<>();
         levelStack.put("first", lvl1);
         levelStack.put("second", lvl2);
         levelStack.put("third", lvl3);
@@ -89,10 +54,5 @@ public class Game //extends Application
         room.start( );
         
     }//main
-
-//    @Override
-//    public void start(Stage stage) throws Exception {
-////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//    
+    
 }//

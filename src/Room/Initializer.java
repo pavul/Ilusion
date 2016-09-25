@@ -10,6 +10,11 @@ import Exception.LoadException;
 /**
  * interfaz que sirve para establecer los metodos de inicializacion de 
  * sprites, fondos, musica, etc.
+ * 
+ * 
+ * this interfacae is used to establish all methos who can be
+ * definiind initialization process of a level
+ * 
  * @author pavulzavala
  */
 public interface Initializer 

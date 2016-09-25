@@ -8,6 +8,11 @@ package Config;
 /**
  * clase que tiene la configuracion del juego
  * @author pavulzavala
+ * 
+ * 
+ * 
+ * this class can have the basic variables for configurations
+ * of the game
  */
 public class Config 
 {

@@ -86,7 +86,7 @@ public class Sprite implements Movement {
     private Image[] frames;
     private int currentFrame;
     private int lastFrame;
-//    pricate Map<String, Image[]>animation;
+    //    pricate Map<String, Image[]>animation;
 
     //animacion actual del sprite
     private AnimationState currentState;
@@ -229,7 +229,8 @@ public class Sprite implements Movement {
      * comstructor 6 este crea los sprites pasandole una imagen que contiene
      * todos los frames, especificandole el ancho y alto de los mismos, este
      * saca el numero de frames automaticamente
-     *
+     * NOTA: la ruta de la imagen a poner debe de estar en un paquete llamado "res"
+     *el valor seria el siguiente: Sprite(32,32,"/res/player.png");
      * @param frameWidth
      * @param imgRoute
      * @param frameHeight

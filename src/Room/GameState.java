@@ -7,6 +7,8 @@ package Room;
 
 /**
  *Enum que tiene los diferentes estados del juego
+ * 
+ * this ENUM have all diferent states of the game
  * @author pavulzavala
  */
 public enum GameState

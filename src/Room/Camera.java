@@ -8,6 +8,10 @@ package Room;
 /**
  * clase que crea una camara que renderiza el room a lo largo de una ventana de puerto
  * portview
+ * 
+ * this class create a camera who render certain part of the level, if the level
+ * is bigger than portview
+ * 
  * @author pavulzavala
  */
 public class Camera implements CameraMovement
@@ -206,13 +210,13 @@ public class Camera implements CameraMovement
      * @param x 
      */
     @Override
-    public void moveX(int x) {
+    public void moveX( int x )
+    {
         
-        
-        this.camx+=x;
+         this.camx += x;
         
         //establece que se muestre el room a cero
-        if(this.camx>=camxMin)
+        if( this.camx >= camxMin )
         {
             this.camx = camxMin;
             this.offsetX=camxMin;
@@ -235,6 +239,9 @@ public class Camera implements CameraMovement
     //@TODO hacer el bound para los margenes de la posicion Y
     /**
      * metodo que mueve la camara sobre el eje y
+     * 
+     * moves camera among y axis
+     * 
      * @param y 
      */
     @Override
@@ -264,6 +271,9 @@ public class Camera implements CameraMovement
     
       /**
      * metodo que mueve la camara sobre el eje X e Y
+     * 
+     * moves camera among X and Y axis
+     * 
      * @param x 
      * @param y 
      */
@@ -273,8 +283,15 @@ public class Camera implements CameraMovement
         moveY(y);
 }//
 
+    
+    /**
+     * this is only for testing purposes, must not be ued on
+     * production
+     * @return 
+     */
     @Override
-    public String toString() {
+    public String toString() 
+    {
         return "Camera{" + "camx=" + camx + ", camy=" + camy + ", camxMin=" + camxMin + ", camxMax=" + camxMax + ", camyMin=" + camyMin + ", camyMax=" + camyMax + ", roomWidth=" + roomWidth + ", roomHeigth=" + roomHeigth + ", viewXPort=" + viewXPort + ", viewYPort=" + viewYPort + ", offsetX=" + offsetX + ", offsetY=" + offsetY + ", marginLeft=" + marginLeft + ", marginRight=" + marginRight + ", marginTop=" + marginTop + ", marginBottom=" + marginBottom + '}';
     }
     

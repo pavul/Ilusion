@@ -9,6 +9,9 @@ import java.awt.image.BufferedImage;
 
 /**
  *clase que tiene una imagen con coordenadas X e Y
+ * 
+ * this class can have an image at certain coordinate X and Y
+ * 
  */
 public class ImageBackground 
 {
@@ -72,6 +75,9 @@ public class ImageBackground
     
     /**
      * estanlece la posicion X e Y de la imagen de fondo
+     * 
+     * set initial posicion where image will be ( on X and Y axis )
+     * 
      * @param x
      * @param y 
      */

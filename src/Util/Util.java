@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 import java.util.Random;
+import java.util.UUID;
 import javax.imageio.ImageIO;
 
 /**
@@ -103,5 +104,17 @@ public class Util
 //    {
 //     Sound.play(fileName);  //(fileName);
 //    }//
+    
+    
+    /**
+     * funcion que genera un String con formato UUID, utilizado para
+     * crear los ID de los sockets de los clientes en una conexion TCP
+     * @return 
+     */
+    public static UUID generateUUID()
+    {
+        return UUID.randomUUID();
+    }//
+    
     
 }//class

@@ -10,6 +10,9 @@ package Exception;
  * musica, etc
  *
  * @author pavulzavala
+ * 
+ * this exceptions is supposed to be launched when there is a problem
+ * loading certain resource, can be an image, audio, etc.
  */
 public class LoadException extends Exception {
     private static final long serialVersionUID = -3704627405466797453L;

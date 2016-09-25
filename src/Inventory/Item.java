@@ -8,36 +8,67 @@ package Inventory;
 import java.awt.image.BufferedImage;
 
 /**
- * clase de items, este puede ser items, skills, spells, etc
+ * esta es una clase generica que puede indicar un item, un skill, 
+ * alguna magia o cualquier otra forma que se puede mostrar en 
+ * pantalla
+ * 
+ * 
+ * this is a generic class who can be item, skill, spell, etc, 
+ * to show that data in an inventory
+ * 
+ * NOTE: if you want to crate a grid of skills, then your items
+ * need to be pictures and/or data of skills
+ * 
  * @author pavulzavala
  */
 public class Item 
 {
-    int currentQty; //cantidad que hay actualmente de este item
-    int minQty; //cantidad minima que acepta este item
-    int maxQty; //cantidad maxima que puede haber de este item
+    int itemId; //item id usefull when we click on it
+    int currentQty; //current quantity of this item, skill, etc
+    int minQty; //minimal quantity who is required for this item
+    int maxQty; //maximal quantity who is required for this item
     
-    BufferedImage icon;//el icono del item
-    String label; //etiqueta de texto de este item, por ejemplo pocion
-    
+    BufferedImage icon;//icon of the item
+    String label; //label, or text of this item
+    String desc; //description of this item, skill, spell, etc
+    String attr; //attribute of this item, skill, spell, etc
     
     /**
      * constructor 1, este deja libre al usuario de establecer los valores con los
      * setters
+     * 
+     * this contrusctor allow the programmer stablish all the values
+     * using setters
      */
     public Item(){}//
     
     
     /**
      * constructor 2, crea el item y le establece sus valores iniciales
+     * 
+     * this constructor creates a new item and stablish its default 
+     * values
+     * 
+     * @param itemId
      * @param currentQty
      * @param minQty
      * @param maxQty
      * @param icon
      * @param label 
+     * @param desc 
+     * @param attr 
      */
-    public Item(int currentQty, int minQty, int maxQty, BufferedImage icon, String label)
+    public Item(
+            int itemId ,
+            int currentQty ,
+            int minQty ,
+            int maxQty ,
+            BufferedImage icon ,
+            String label, 
+            String desc ,
+            String attr)
     {
+    this.itemId = itemId ;
     this.currentQty=currentQty;
     this.minQty=minQty;
     this.maxQty=maxQty;

@@ -6,7 +6,8 @@
 package Sprite;
 
 /**
- *
+ *interfaz que tiene algunas definiciones de movimiento que se implementan en los sprites
+ * por lo general son los movimientos basicos
  * @author Ilusion
  */
 public interface Movement 

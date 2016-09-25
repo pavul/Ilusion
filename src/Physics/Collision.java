@@ -10,6 +10,10 @@ import Sprite.Sprite;
 
 /**
  * clase que tiene los metodos para checar colisiones entre los diferentes sprites
+ * 
+ * this class have few methos to check collisions between sprites, or tiles,
+ * or shapes
+ * 
  * @author pavulzavala
  */
 public class Collision 
@@ -18,6 +22,9 @@ public class Collision
     
      /**
       * metodo que checa si hay colision circular entre 2 sprites
+      * 
+      * check if there is collision between two sprites
+      * this collission is circular
      *
      * @param s1
      * @param s2
@@ -25,7 +32,7 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * @example:   colision.circleColision(player, enemy);
          */
-	public boolean circleColision(Sprite s1,  Sprite s2)
+	public static boolean circleColision(Sprite s1,  Sprite s2)
 	{
 		float cx=s1.getCenterX()-s2.getCenterX();
 		float cy=s1.getCenterY()-s2.getCenterY();
@@ -50,7 +57,7 @@ public class Collision
      * @param bounce
 	 * 
 	 * */
-        public void blockCircle(Sprite s1,Sprite s2, boolean bounce)
+        public static void blockCircle(Sprite s1,Sprite s2, boolean bounce)
 	{
 		
 		float cx=s1.getCenterX()-s2.getCenterX();
@@ -86,11 +93,14 @@ public class Collision
         /**
          * funcion que checa si hay una colision rectangular entre 2 sprites
 	 * Example:  sprite.rectangleColision(enemy);
-     * @param s1
-     * @param s2
+         * 
+         * checks if there is rectangle collision  between 2 sprites
+         * 
+         * @param s1
+         * @param s2
 	 * @return true if there is a colision and false if not
 	 * */
-	public boolean rectangleColision(Sprite s1, Sprite s2)
+	public static  boolean rectangleColision(Sprite s1, Sprite s2)
 	{
 		boolean hit=false;
 		float vx=s1.getCenterX()-s2.getCenterX();
@@ -118,7 +128,11 @@ public class Collision
     /**
      * funcion que checa si hay una colision entre sprite1 y sprite2 e indica si se debe de mover
      * el sprite que se empuja o si se debe de revotar
-	 * Example:  sprite.blockRectangle(enemy);
+     * 
+     * checks if there is a collision between two sprites and if the sprite 1
+     * is pushing sprite 2
+     *
+     * Example:  sprite.blockRectangle(enemy);
      * @param s1
      * @param s2
 	 * @param move, if this is set to true, the sprite will push the colision sprite
@@ -128,7 +142,7 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * 
 	 * */
-	public String blockRectangle(Sprite s1,Sprite s2,boolean move ,boolean bouncing)
+	public static String blockRectangle(Sprite s1,Sprite s2,boolean move ,boolean bouncing)
 	{
 		String side="";
 		float vx=s1.getCenterX()-s2.getCenterX();
@@ -151,7 +165,7 @@ public class Collision
 						side="TOP";
 						if(move)s2.setY(s2.getY()-1);
 						s1.setY(s1.getY()+overlapY);
-			        }
+                                         }
 					else
 					{
 						side="BOTTOM";
@@ -181,13 +195,15 @@ public class Collision
 			}//height
 			else
 			{
-				side="NONE";
+				side="";
+//				side="NONE";
 			}
 			
 		}//width
 		else
 		{
-			side="NONE";
+			side="";
+//			side="NONE";
 		}
 		return side;
 		
@@ -195,8 +211,12 @@ public class Collision
         
         
          /**
-     * funcion que checa si hay una colision entre sprite1 y sprite2 e indica si se debe de mover
+     * funcion que checa si hay una colision entre sprite1 y coordenadas X e Y e indica si se debe de mover
      * el sprite que se empuja o si se debe de rebotar
+     * 
+     * checks if there is a collision between sprite 1 and certain coordinate
+     * and check if the sprite mush be pushed the other or if it must bounce
+     * 
      * @param s1
      * @param x
      * @param y
@@ -205,90 +225,64 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * 
 	 * */
-	public String blockRectangle(Sprite s1,int x, int y, int width,int height)
-                //,boolean move ,boolean bouncing)
+	public static String blockRectangle(Sprite s1,int x, int y, int width,int height)
 	{
             int halfWidth = width / 2;
             int halfHeigth = height / 2;
             int centerX = x + halfWidth;
             int centerY = y + halfHeigth;
             
-            
-//		String side="";
-		String side=Config.COLISION_NONE;
-//                System.out.println("vx = player.cx - centery: "+s1.getCenterX()+" - "+centerX);
-//                System.out.println("vy = player.cy - centery: "+s1.getCenterY()+" - "+centerY);
-                
+		String side=Config.COLISION_NONE;         
 		float vx=s1.getCenterX()-centerX;
 		float vy=s1.getCenterY()-centerY;
 		
 		float combinedHalfWidth=s1.getHalfWidth()+halfWidth;
 		float combinedHalfHeight=s1.getHalfHeight()+halfHeigth;
-                
-//		System.out.println(" combhalwid: "+combinedHalfWidth);
-//                System.out.println(" comhalheig: "+combinedHalfHeight);
-                
-		if(Math.abs(vx) < combinedHalfWidth)
+            
+                if(Math.abs(vx) < combinedHalfWidth)
 		{
 			if(Math.abs(vy) < combinedHalfHeight)
 			{
 				float overlapX=combinedHalfWidth-Math.abs(vx);
 				float overlapY=combinedHalfHeight-Math.abs(vy);
-				
-//                                System.out.println("overlapX: "+overlapX);
-//                                System.out.println("overlapY: "+overlapY);
-                                
-                                
+		
 				if(overlapX>overlapY)
 				{
-//                                    System.out.println("ENtra a overlap Y ");
-					if(vy>0)
+
+                                    if(vy>0)
 					{
-//						side=Config.COLISION_TOP;
-//						if(move)s2.setY(s2.getY()-1);
-						s1.setY(s1.getY()+overlapY);
+                                               s1.setY(s1.getY()+overlapY);
                                                 return Config.COLISION_TOP;
                                         }
 					else
 					{
-//						side=Config.COLISION_BOTTOM;
-//						if(move)s2.setY(s2.getY()+1);
+
                                                 s1.setY(s1.getY()-overlapY-2);   
                                                 return Config.COLISION_BOTTOM;
 					}
-//					if(bouncing)s1.setSpeedY(s1.getSpeedY()*-1);
+
 				}
                                 else 
 				{
 					
 					if(vx>0)
 					{
-//						side=Config.COLISION_LEFT;
-						
-//						if(move)s2.setX(s2.getX()-1);
-						s1.setX(s1.getX()+overlapX);
+
+                                            s1.setX(s1.getX()+overlapX);
                                                 return Config.COLISION_LEFT;
 					}
 					else
 					{
-//						side=Config.COLISION_RIGHT;
-//						if(move)s2.setX(s2.getX()+1);
-						s1.setX(s1.getX()-overlapX);
+                                                s1.setX(s1.getX()-overlapX);
                                                 return Config.COLISION_RIGHT;
 					}
-//					if(bouncing)s1.setSpeedX(s1.getSpeedX()*-1);
+
 		         }//
 			}//height
-//			else
-//			{
-//				side=Config.COLISION_NONE;
-//			}
-			
+
+                        
 		}//width
-//		else
-//		{
-//			side=Config.COLISION_NONE;
-//		}
+                
 		return side;
 		
 	}//colision con rectangulos, pero     
@@ -300,6 +294,12 @@ public class Collision
          * se pudieran tomar como solidos, la funcion checa si el sprite hace una
          * colision con algun tile que debe de ser solido, estos tiles solidos se
          * establecen con el mapa de colision  int []COLISIONMAP
+         * 
+         * 
+         * check the collisions of the sprite with all tiles who are in 
+         * COLISIONMAP array, that means those tiles are solids and are not 
+         * just to show them as background
+         * 
      * @param spr
      * @param colisionMap
          * @param cols
@@ -308,7 +308,7 @@ public class Collision
      * @param tileHeight 
      * @return  
          */
-        public String checkColsionTile(Sprite spr,int[] colisionMap,int cols, int rows, int tileWidth, int tileHeight)
+        public static  String checkColsionTile(Sprite spr,int[] colisionMap,int cols, int rows, int tileWidth, int tileHeight)
         {
             String side= Config.COLISION_NONE;
             String aux="";

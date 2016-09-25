@@ -1,9 +1,7 @@
 
-import Level.Level;
+import Level.GameLevel;
 import Room.ImageBackground;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 /*
@@ -16,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author pavulzavala
  */
-public class SecondLevel extends Level
+public class SecondLevel extends GameLevel
 {
     public SecondLevel(int roomWidth, int roomHeight, int viewWidth, int viewHeight,
           ArrayList<ImageBackground> imgbg)
@@ -46,8 +44,9 @@ public class SecondLevel extends Level
         
         System.out.println(" RENDER : "+this.getClass().getName());
 //        drawBgColor((Graphics2D)g, Color.GREEN);
-        drawBgColor((Graphics2D)g, Color.GREEN, 0,0,
-                640, 480);
+        
+//        drawBgColor((Graphics2D)g, Color.GREEN, 0,0,
+//                640, 480);
         
     }
 
@@ -68,5 +67,15 @@ public class SecondLevel extends Level
     public void updateControl() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void manageNetworkData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean initData() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return false;}
     
 }//class
