@@ -19,6 +19,26 @@ import Sprite.Sprite;
 public class Collision 
 {
     
+    private static Collision instance = null;
+    
+    private Collision()
+    {}
+    
+    /**
+     * this create a collision instance if is null
+     * @return collision
+     */
+    public static Collision getInstance()
+    {
+    
+        if( instance == null )
+            return new Collision();
+        else
+            return instance;
+    
+    }
+    
+    
     
      /**
       * metodo que checa si hay colision circular entre 2 sprites
@@ -32,7 +52,7 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * @example:   colision.circleColision(player, enemy);
          */
-	public static boolean circleColision(Sprite s1,  Sprite s2)
+	public boolean circleColision(Sprite s1,  Sprite s2)
 	{
 		float cx=s1.getCenterX()-s2.getCenterX();
 		float cy=s1.getCenterY()-s2.getCenterY();
@@ -57,7 +77,7 @@ public class Collision
      * @param bounce
 	 * 
 	 * */
-        public static void blockCircle(Sprite s1,Sprite s2, boolean bounce)
+        public void blockCircle(Sprite s1,Sprite s2, boolean bounce)
 	{
 		
 		float cx=s1.getCenterX()-s2.getCenterX();
@@ -100,7 +120,7 @@ public class Collision
          * @param s2
 	 * @return true if there is a colision and false if not
 	 * */
-	public static  boolean rectangleColision(Sprite s1, Sprite s2)
+	public  boolean rectangleColision(Sprite s1, Sprite s2)
 	{
 		boolean hit=false;
 		float vx=s1.getCenterX()-s2.getCenterX();
@@ -142,7 +162,7 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * 
 	 * */
-	public static String blockRectangle(Sprite s1,Sprite s2,boolean move ,boolean bouncing)
+	public String blockRectangle(Sprite s1,Sprite s2,boolean move ,boolean bouncing)
 	{
 		String side="";
 		float vx=s1.getCenterX()-s2.getCenterX();
@@ -225,7 +245,7 @@ public class Collision
 	 * @return true if there is a colision and false if not
 	 * 
 	 * */
-	public static String blockRectangle(Sprite s1,int x, int y, int width,int height)
+	public String blockRectangle(Sprite s1,int x, int y, int width,int height)
 	{
             int halfWidth = width / 2;
             int halfHeigth = height / 2;
@@ -308,7 +328,7 @@ public class Collision
      * @param tileHeight 
      * @return  
          */
-        public static  String checkColsionTile(Sprite spr,int[] colisionMap,int cols, int rows, int tileWidth, int tileHeight)
+        public  String checkColsionTile(Sprite spr,int[] colisionMap,int cols, int rows, int tileWidth, int tileHeight)
         {
             String side= Config.COLISION_NONE;
             String aux="";

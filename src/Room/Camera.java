@@ -49,7 +49,12 @@ public class Camera implements CameraMovement
             
     
     /**
-     * constructor 1, este crea 
+     * constructor 1, 
+     * creates a camera defining the width and heigth values of the room ( these values 
+     * are the boundaries of the camera ),
+     * and the portion that has to show in the screen ( viewXPort, viewYPort)
+     * 
+     * 
      * @param roomWidth
      * @param roomHeight
      * @param viewXPort
@@ -174,14 +179,25 @@ public class Camera implements CameraMovement
         return marginLeft;
     }
 
+    /**
+     * this method specifies the left boundary that the camera
+     * has to check when a sprite si approaching to the left edge
+     * @param marginLeft 
+     */
     public void setMarginLeft(int marginLeft) {
         this.marginLeft = marginLeft;
     }
 
+    
+    
     public int getMarginRight() {
         return marginRight;
     }
 
+    /**
+     * * this method specifies the right boundary that the camera
+     * has to check when a sprite si approaching to the right edge
+     */
     public void setMarginRight(int marginRight) {
         this.marginRight = marginRight;
     }

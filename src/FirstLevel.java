@@ -6,6 +6,7 @@ import Sprite.Sprite;
 import Util.Util;
 import Level.GameLevel;
 import Physics.Collision;
+//import Physics.Collision;
 import Room.GameState;
 import static Room.GameState.DIALOGUING;
 import Room.ImageBackground;
@@ -43,7 +44,7 @@ public class FirstLevel extends GameLevel
 //    int [] walkUpAnim =;
 //    int [] walkDownAnim =;
 //    
-Collision colision;
+//Collision colision;
 
     Sprite imgMap;
     
@@ -138,7 +139,7 @@ Collision colision;
          logger = Logger.getLogger(FirstLevel.class.getName());
     
          
-         colision = new Collision();  
+//         colision = Collision.getInstance();  
          
   //here we add the map array to the level instance
   tileMaps.add(map);
@@ -281,8 +282,9 @@ Collision colision;
                     player.updateSubanimation();
                     updateControl(); 
 
-                    colision.checkColsionTile(player, colisionTileMaps.get(0),
-                    20, 50, 32, 32);
+                    Collision.getInstance()
+                             .checkColsionTile(player, colisionTileMaps.get(0),
+                             20, 50, 32, 32);
     
                     if(player.getY() >= 500)
                     {
@@ -308,9 +310,9 @@ Collision colision;
                        player.updateSubanimation();
                        
                     //si hay dialogo
-                    if(keyControl.isKeyPress(KeyEvent.VK_D))
+                    if( keyControl.isKeyPress( KeyEvent.VK_D ) )
                     {
-                        if(dialog.nextMessage())
+                        if( dialog.nextMessage( ) )
                         {
                         //si se terminan los menajes se cambia a playing
                         gameState = GameState.PLAYING;

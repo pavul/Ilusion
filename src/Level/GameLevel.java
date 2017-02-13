@@ -11,7 +11,6 @@ import Room.GameState;
 import Room.ImageBackground;
 import Room.Room;
 import Sprite.Sprite;
-import jaco.mp3.player.MP3Player;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -94,7 +93,7 @@ public abstract class GameLevel
    
    //objeto reproductor de musica de fondo
    //intance to play music
-   protected MP3Player mp3Player;
+//   protected MP3Player mp3Player;
    
    //estado del nivel en el juego
    //variable who holds the current state of the game
@@ -120,7 +119,7 @@ public abstract class GameLevel
        colisionTileMaps= new ArrayList<>();
        enemyPool = new ArrayList<>();
        
-       mp3Player = new MP3Player();
+//       mp3Player = new MP3Player();
        
    init();
    }//const
@@ -153,6 +152,7 @@ public abstract class GameLevel
                         tileRows * tileHeight, 
                         viewWidth,
                         viewHeight);
+        
         cam.setMarginLeft( viewWidth / 3 );
         cam.setMarginRight( ( viewHeight / 3 )  * 2 );
    
@@ -666,13 +666,13 @@ public abstract class GameLevel
         this.properties = properties;
     }
 
-    public MP3Player getMp3Player() {
-        return mp3Player;
-    }
-
-    public void setMp3Player(MP3Player mp3Player) {
-        this.mp3Player = mp3Player;
-    }
+//    public MP3Player getMp3Player() {
+//        return mp3Player;
+//    }
+//
+//    public void setMp3Player(MP3Player mp3Player) {
+//        this.mp3Player = mp3Player;
+//    }
     
     
     

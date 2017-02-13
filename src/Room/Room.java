@@ -41,6 +41,7 @@ public class Room extends Canvas implements
     //indicate if the game is running or not
     protected boolean running;
     
+    
     //variable para pausar el juego
     //this variable is used to pause the game
     protected boolean pause;
@@ -53,17 +54,17 @@ public class Room extends Canvas implements
    
 //   protected GameState gameState; //estado del juego
    
-   //variable que guarda el nivel o pantalla en que se esta jugando
-   //variable that store the current level we are in the game
+//   this variable saves the reference to current level that we can
+//   use when we wan to change lvl or use tome util methods
    protected GameLevel currentLevel;
    
    //esta estructura se utiliza para guardar aqui todos los objetos que
    //necesitan estar en todo el juego, pueden ser datos como el usuario
    //, puntajes, upgrades, etc/
    //this structure is used to store all those data that are persistent
-   //between levels, like, score, upgrades, items, etc, because each
+   //between levels, like, score, upgrades, items, general HUD, etc, because each
    //level can set new ammount of data when it starts
-   protected Map< String, Object >persistentData;
+   protected Map< String, ? >persistentData;
    
    
    //stack que mantiene todos los niveles
@@ -159,7 +160,7 @@ public class Room extends Canvas implements
      * 
      * start the thread of the game
      */
-    public synchronized void start() 
+    public final synchronized void start() 
     {
             //nivel a cargar por default, este se establece en el constructor 
             loadLvl( firsLvlToLoad );
@@ -175,7 +176,7 @@ public class Room extends Canvas implements
      * stop the thread of the game
      * wachout with this method
      */
-    public synchronized void stop()
+    public final synchronized void stop()
     {
         try
         {
@@ -188,11 +189,12 @@ public class Room extends Canvas implements
     
     
     /**
-     * this method calls al update process of levels, 
+     * this method calls all update process of levels, 
      * i mean, inside this method the update of the logic
-     * of the game will be taken
+     * of the game will be taken, at the same time updates
+     * for logic and render of the game will be taken
      */
-    public synchronized void update()
+    public final synchronized void update()
     {   
         frameCount++;
         if( frameCount == fps )frameCount = 0;
@@ -209,7 +211,7 @@ public class Room extends Canvas implements
      * this function call render methods of al levels
      * 
      */
-    public synchronized void render()
+    public final synchronized void render()
     {
         //si el room es de un servidor, no se muestra interfaz grafica
         if(serverApplication) return;
@@ -227,7 +229,8 @@ public class Room extends Canvas implements
                    try
                    {
                       currentLevel.render(g);  
-                   }catch(Exception e)
+                   }
+                   catch(Exception e)
                    {  }
 
                 this.closeGraphicsBufferStrategy(g, this.getBufferStrategy());
@@ -291,7 +294,7 @@ public class Room extends Canvas implements
  * here is where the main process of the threas is taken
  */
     @Override
-    public void run() 
+    public final void run() 
     {
      
     long lastTime= System.nanoTime();
@@ -348,7 +351,7 @@ public class Room extends Canvas implements
      * an auxiliar function to show some data of FPS that are
      * processed
      */
-    public void showFPS(Graphics2D g2)
+    public final void showFPS(Graphics2D g2)
     {
         
 //    g2.setColor(Color.yellow);
@@ -368,7 +371,7 @@ public class Room extends Canvas implements
      * regresa el objeto graphics
      * @return 
      */
-    protected Graphics getGraphicsBufferStrategy()
+    protected final Graphics getGraphicsBufferStrategy()
     {
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null)
@@ -387,7 +390,7 @@ public class Room extends Canvas implements
      * @param g
      * @param bs 
      */
-    protected void closeGraphicsBufferStrategy(Graphics g, BufferStrategy bs)
+    protected final void closeGraphicsBufferStrategy(Graphics g, BufferStrategy bs)
     {
         g.dispose();
         bs.show();
@@ -484,8 +487,8 @@ public class Room extends Canvas implements
           currentLevel.removeKeyListener(this);
           
           //se quitan los sonidos de fondo del nivel
-          currentLevel.getMp3Player().pause();
-          currentLevel.getMp3Player().removeAll();
+//          currentLevel.getMp3Player().pause();
+//          currentLevel.getMp3Player().removeAll();
           
           currentLevel = null;
           }//
@@ -601,6 +604,11 @@ public class Room extends Canvas implements
     public void setServerApplication(boolean serverApplication) {
         this.serverApplication = serverApplication;
     }
+
+    
+    
+    
+    
     
 }//class
 

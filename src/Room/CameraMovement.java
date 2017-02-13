@@ -7,6 +7,7 @@ package Room;
  */
 public interface CameraMovement 
 {
+    
     /**
      * metodo que mueve la camara sobre el eje x
      * @param x 
